@@ -24,10 +24,7 @@
 #include <sys/types.h>
 
 #include "Layer.h"
-
-#ifdef UI_BLUR
 #include "Blur.h"           // libuiblur.so
-#endif
 
 // ---------------------------------------------------------------------------
 
@@ -58,9 +55,7 @@ public:
     virtual bool setBlurMaskAlphaThreshold(float alpha) { mBlurMaskAlphaThreshold = alpha; return true; }
 
 private:
-#ifdef UI_BLUR
     qtiblur::BLUR_TOKEN mBlurToken;
-#endif
     wp<Layer> mBlurMaskLayer;
     int32_t mBlurMaskSampling;
     float mBlurMaskAlphaThreshold;

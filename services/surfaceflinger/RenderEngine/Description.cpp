@@ -104,5 +104,4 @@ const mat4& Description::getColorMatrix() const {
     return mColorMatrix;
 }
 
-
 } /* namespace android */

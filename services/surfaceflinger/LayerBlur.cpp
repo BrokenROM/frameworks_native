@@ -96,9 +96,7 @@ LayerBlur::LayerBlur(SurfaceFlinger* flinger, const sp<Client>& client,
     : Layer(flinger, client, name, w, h, flags), mBlurMaskSampling(1), mBlurMaskAlphaThreshold(0.0f)
     ,mLastFrameSequence(0)
 {
-#ifdef UI_BLUR
     mBlurToken = qtiblur::initBlurToken();
-#endif
 
     GLuint texnames[3];
     mFlinger->getRenderEngine().genTextures(3, texnames);
@@ -108,9 +106,7 @@ LayerBlur::LayerBlur(SurfaceFlinger* flinger, const sp<Client>& client,
 }
 
 LayerBlur::~LayerBlur() {
-#ifdef UI_BLUR
     qtiblur::releaseBlurToken(mBlurToken);
-#endif
 
     releaseFbo(mFboCapture);
     releaseFbo(mFboMasking);
@@ -124,6 +120,17 @@ void LayerBlur::onDraw(const sp<const DisplayDevice>& hw, const Region& /*clip*/
 {
     clock_t t1 = clock();
     const ScopedTrace traceTotal(ATRACE_TAG, "Blur.onDraw");
+
+#if 0
+    ALOGV("onDraw(). begin. hww:%d, hwh:%d, rqw:%d, rqh:%d, x:%.0f, y:%.0f, alpha:%d, blur:%d,"
+          " drawingZ:%d, currentZ:%d, useIdentityTransform:%s",
+            hw->getWidth(), hw->getHeight(),
+            getDrawingState().requested.w, getDrawingState().requested.h,
+            layerX, layerY,
+            (int)s.alpha, s.blur, getDrawingState().z, getCurrentState().z,
+            useIdentityTransform ? "true":"false");
+    //hw->getTransform().dump("hw transform");
+#endif
 
     const Layer::State& s(getDrawingState());
     float layerX = s.transform.tx();
@@ -171,7 +178,6 @@ void LayerBlur::onDraw(const sp<const DisplayDevice>& hw, const Region& /*clip*/
         // blur
         size_t outTexWidth = mTextureBlur.getWidth();
         size_t outTexHeight = mTextureBlur.getHeight();
-#ifdef UI_BLUR
         if (!qtiblur::blur(mBlurToken,
                 s.blur,
                 mTextureCapture.getTextureName(),
@@ -182,7 +188,6 @@ void LayerBlur::onDraw(const sp<const DisplayDevice>& hw, const Region& /*clip*/
                 &outTexHeight)) {
             return;
         }
-#endif
 
         // mTextureBlur now has "Blurred image"
         mTextureBlur.setDimensions(outTexWidth, outTexHeight);
