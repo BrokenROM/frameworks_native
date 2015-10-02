@@ -39,14 +39,14 @@
 #include "RenderEngine/RenderEngine.h"
 #include "DisplayHardware/FramebufferSurface.h"
 #include "DisplayUtils.h"
-#ifdef QTI_BSP
-#include <ExSurfaceFlinger/ExSurfaceFlinger.h>
-#include <ExSurfaceFlinger/ExLayer.h>
-#include <ExSurfaceFlinger/ExHWComposer.h>
-#include <ExSurfaceFlinger/ExVirtualDisplaySurface.h>
+#include <ExSurfaceFlinger.h>
+#include <ExLayer.h>
+#include <DisplayHardware/ExHWComposer.h>
+#include <DisplayHardware/ExVirtualDisplaySurface.h>
+#include <dlfcn.h>
+#if QTI_BSP
 #include <gralloc_priv.h>
 #endif
-#include <cutils/properties.h>
 
 namespace android {
 
