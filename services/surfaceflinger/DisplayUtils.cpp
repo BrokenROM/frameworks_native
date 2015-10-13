@@ -47,6 +47,8 @@
 #include <gralloc_priv.h>
 #endif
 
+#include <cutils/properties.h>
+
 namespace android {
 
 DisplayUtils* DisplayUtils::sDisplayUtils = NULL;
