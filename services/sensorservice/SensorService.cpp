@@ -919,7 +919,6 @@ status_t SensorService::enable(const sp<SensorEventConnection>& connection,
     // to maintain the on-change logic (any on-change events except the initial
     // one should be trigger by a change in value). Also if this sensor isn't
     // already active, don't call flush().
-    const SensorDevice& device(SensorDevice::getInstance());
     if (err == NO_ERROR &&
             sensor->getSensor().getReportingMode() != AREPORTING_MODE_ONE_SHOT &&
             sensor->getSensor().getReportingMode() != AREPORTING_MODE_ON_CHANGE &&
