@@ -39,12 +39,11 @@
 #include "RenderEngine/RenderEngine.h"
 #include "DisplayHardware/FramebufferSurface.h"
 #include "DisplayUtils.h"
-#include <ExSurfaceFlinger.h>
-#include <ExLayer.h>
-#include <DisplayHardware/ExHWComposer.h>
-#include <DisplayHardware/ExVirtualDisplaySurface.h>
-#include <dlfcn.h>
-#if QTI_BSP
+#ifdef QTI_BSP
+#include <ExSurfaceFlinger/ExSurfaceFlinger.h>
+#include <ExSurfaceFlinger/ExLayer.h>
+#include <ExSurfaceFlinger/ExHWComposer.h>
+#include <ExSurfaceFlinger/ExVirtualDisplaySurface.h>
 #include <gralloc_priv.h>
 #endif
 
