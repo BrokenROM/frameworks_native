@@ -958,7 +958,9 @@ status_t Parcel::writeBlob(size_t len, bool mutableCopy, WritableBlob* outBlob)
     ALOGV("writeBlob: write to ashmem");
     int fd = ashmem_create_region("Parcel Blob", len);
     if (fd < 0) return NO_MEMORY;
-
+#ifndef DISABLE_ASHMEM_TRACKING
+    mBlobAshmemSize += len;
+#endif
     int result = ashmem_set_prot_region(fd, PROT_READ | PROT_WRITE);
     if (result < 0) {
         status = result;
@@ -1941,7 +1943,7 @@ void Parcel::initState()
     mAllowFds = true;
     mOwner = NULL;
 #ifndef DISABLE_ASHMEM_TRACKING
-    mOpenAshmemSize = 0;
+    mBlobAshmemSize = 0;
 #endif
 }
 
@@ -1962,20 +1964,8 @@ void Parcel::scanForFds() const
 
 size_t Parcel::getBlobAshmemSize() const
 {
-    // This used to return the size of all blobs that were written to ashmem, now we're returning
-    // the ashmem currently referenced by this Parcel, which should be equivalent.
-    // TODO: Remove method once ABI can be changed.
 #ifndef DISABLE_ASHMEM_TRACKING
-    return mOpenAshmemSize;
-#else
-    return 0;
-#endif
-}
-
-size_t Parcel::getOpenAshmemSize() const
-{
-#ifndef DISABLE_ASHMEM_TRACKING
-    return mOpenAshmemSize;
+    return mBlobAshmemSize;
 #else
     return 0;
 #endif
