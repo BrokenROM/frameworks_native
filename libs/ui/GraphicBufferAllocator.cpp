@@ -104,6 +104,15 @@ status_t GraphicBufferAllocator::alloc(uint32_t width, uint32_t height,
     // we have a h/w allocator and h/w buffer is requested
     status_t err;
 
+#ifdef EXYNOS4_ENHANCEMENTS
+    if ((format == 0x101) || (format == 0x105) || (format == 0x107)) {
+        // 0x101 = HAL_PIXEL_FORMAT_YCbCr_420_P (Samsung-specific pixel format)
+        // 0x105 = HAL_PIXEL_FORMAT_YCbCr_420_SP (Samsung-specific pixel format)
+        // 0x107 = HAL_PIXEL_FORMAT_YCbCr_420_SP_TILED (Samsung-specific pixel format)
+        usage |= GRALLOC_USAGE_HW_FIMC1; // Exynos HWC wants FIMC-friendly memory allocation
+    }
+#endif
+
     // Filter out any usage bits that should not be passed to the gralloc module
     usage &= GRALLOC_USAGE_ALLOC_MASK;
 
