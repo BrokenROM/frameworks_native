@@ -179,6 +179,7 @@ status_t GraphicBufferMapper::unlockAsync(buffer_handle_t handle, int *fenceFd)
     ATRACE_CALL();
     status_t err;
 
+
     if (mAllocMod->common.module_api_version >= GRALLOC_MODULE_API_VERSION_0_3) {
         err = mAllocMod->unlockAsync(mAllocMod, handle, fenceFd);
     } else {
@@ -190,5 +191,17 @@ status_t GraphicBufferMapper::unlockAsync(buffer_handle_t handle, int *fenceFd)
     return err;
 }
 
+#ifdef EXYNOS4_ENHANCEMENTS
+status_t GraphicBufferMapper::getphys(buffer_handle_t handle, void** paddr)
+{
+    status_t err;
+
+    err = mAllocMod->getphys(mAllocMod, handle, paddr);
+
+    ALOGW_IF(err, "getphys(%p) fail %d(%s)",
+    handle, err, strerror(-err));
+    return err;
+}
+#endif
 // ---------------------------------------------------------------------------
 }; // namespace android
